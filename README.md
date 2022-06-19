@@ -28,6 +28,7 @@ The gestures I  trained are as given in the image below.
 ![Signs](images/signs.jpg)
 
 ### Prerequisites.
+
 ⦁	To complete this project, we needed the following: A local development environment for Python 3 with at least 1GB of RAM. 
 ⦁	A working webcam to do real-time image detection.
 
@@ -64,17 +65,19 @@ The gestures I  trained are as given in the image below.
 ```
 
 ### 2. Preparing the Sign Language Classifications Dataset
-⦁	We will build a sign language classifier using a neural network. Our goal is to produce a model that accepts a picture of a hand as input and outputs a letter.
-⦁	First, we download the database to our current working directory
+
+⦁ We will build a sign language classifier using a neural network. Our goal is to produce a model that accepts a picture of a hand as input and outputs a letter.
+⦁ First, we download the database to our current working directory
 - As before, we imported the necessary utilities to create the class that will hold our data. For data processing here, we will create the train and test datasets folders.
 
 ![Capture](https://user-images.githubusercontent.com/56514238/174483629-59ebc726-c2de-42e7-b2e1-cda8a5902c8e.PNG)
 
 
 #### 3. Building and Training the Sign Language Classifier Using Deep Learning
+
 We built a neural network with layers, define a loss, an optimizer, and finally, optimize the loss function for our neural network predictions. At the end of this step, we will have a working sign language classifier.
-⦁	Create a new file called train.py
-⦁	Import the necessary utilities
+⦁ Create a new file called train.py
+⦁ Import the necessary utilities
 
 ``` python
 import tensorflow as tf
@@ -83,7 +86,9 @@ import os
 ```
 
 ### Data preprocessing using Keras
+
 With Keras preprocessing layers, you can build and export models that are truly end-to-end: models that accept raw images or raw structured data as input; models that handle feature normalization or feature value indexing on their own. Image preprocessing These layers are for standardizing the inputs of an image model.
+
 ``` python
 classifier = tf.keras.models.Sequential()
 classifier.add(tf.keras.layers.Conv2D(filters=32,
@@ -119,7 +124,9 @@ classifier.fit(training_set,
                   validation_data = test_set)
 model_json = classifier.to_json()
 ```
+
 ### Saving Models and Weights
+
 ``` python
 with open("model_new.json", "w") as json_file:
     json_file.write(model_json)
@@ -127,7 +134,9 @@ print('Model Saved')
 classifier.save_weights('model_new.h5')
 print('Weights saved')
 ```
+
 ### Define Keras neural network that includes the layers
+
 ``` python
 import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
@@ -150,18 +159,24 @@ test_set = test_datagen.flow_from_directory('E:/Graduation project/Sign-Language
                                             color_mode = 'grayscale',
                                             class_mode = 'categorical')
 ```
+
 ### 	After this we initialized the neural network, defined a loss function
-	Launching our train.py file to see our neural network trains:
+
+Launching our train.py file to see our neural network trains:
+
 ![Model Summary](images/model_summary.PNG)
 
 ### ⦁	We made 5 epochs as the following
+
 ![Output](images/output.PNG)
 
 To obtain lower loss, we could increase the number of epochs to 10, or even 20. However, after a certain period of training time, the network loss will cease to decrease with increased training time. To sidestep this issue, as training time increases.
 
 ###4. Evaluating the Sign Language Classifier
-⦁	Create a new file called Application.py
-⦁	Import the necessary utilities 
+
+⦁ Create a new file called Application.py
+⦁ Import the necessary utilities 
+
 ``` python
 import numpy as np
 
@@ -180,8 +195,10 @@ import enchant
 
 from keras.models import model_from_json
 ```
-⦁	First of all, we defined a class called Application then we defined __init__ method in it
-⦁	then we imported all the models we used in our application
+
+⦁ First of all, we defined a class called Application then we defined __init__ method in it
+⦁ then we imported all the models we used in our application
+
 ``` python
 class Application:
 
@@ -217,8 +234,10 @@ class Application:
         self.loaded_model_smn = model_from_json(self.model_json_smn)
         self.loaded_model_smn.load_weights("E:/Graduation project/Sign-Language-To-Text-Conversion-main/Models/model-bw_smn.h5")
 ```
-⦁	Then we made the GUI (We made it simple, easy to use for right-handed people)
-⦁	we used tkinter library to build our project interface
+
+⦁ Then we made the GUI (We made it simple, easy to use for right-handed people)
+⦁ we used tkinter library to build our project interface
+
 ``` python
  self.root = tk.Tk()
         self.root.title("Sign Language To Text Conversion")
@@ -269,10 +288,13 @@ class Application:
         self.bt3 = tk.Button(self.root, command = self.action3, height = 0, width = 0)
         self.bt3.place(x = 625, y = 745)
 ```
+
 ### The GUI (Graphical User Interface) of the application is as shown below
+
 ![Capture](https://user-images.githubusercontent.com/56514238/174484342-3e90f6fa-110b-46bf-bbd0-6a0867d0f196.PNG)
 
-⦁	Then we added a method loop, which reads from the camera at every timestep:
+⦁ Then we added a method loop, which reads from the camera at every timestep:
+
 ``` python
  def video_loop(self):
         ok, frame = self.vs.read()
@@ -294,11 +316,14 @@ class Application:
             self.panel.imgtk = imgtk
             self.panel.config(image = imgtk)
 ```
-⦁	We captured each frame shown by the webcam of our machine 
-⦁	In each frame I defined a region of interest (ROI) which is denoted by a blue bounded square as shown in the image below.
+
+⦁ We captured each frame shown by the webcam of our machine 
+⦁ In each frame I defined a region of interest (ROI) which is denoted by a blue bounded square as shown in the image below.
+
 ![trainingdata](https://user-images.githubusercontent.com/56514238/174484396-2cf6b1b3-3839-43e1-b2c8-b095d616ce09.png)
 
-⦁	The code for image processing is as following:
+⦁ The code for image processing is as following:
+
 ``` python
 cv2image = cv2image[y1 : y2, x1 : x2]
 
@@ -310,11 +335,15 @@ cv2image = cv2image[y1 : y2, x1 : x2]
 
             ret, res = cv2.threshold(th3, 70, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 ```
-⦁	And this is how it looks like after applying gaussian blur filter on it:
+
+⦁ And this is how it looks like after applying gaussian blur filter on it:
+
 ![roi](https://user-images.githubusercontent.com/56514238/174484442-4fd8083f-95bd-4a6d-a664-18a8ca77a297.png)
 
 ### Testing
+
 we defined a method to predict the input image 
+
 ``` python
  def predict(self, test_image):
 
@@ -335,7 +364,8 @@ we defined a method to predict the input image
 
         inde = 1
 ```
-⦁	While testing the applications we found out that some of the symbol predictions were coming out wrong.
+
+⦁ While testing the applications we found out that some of the symbol predictions were coming out wrong.
  So, we used two layers of algorithms to verify and predict symbols which are more similar to each other so that I can get close as I can to detect the symbol shown.
  In our testing the following symbols were not showing properly and were giving output as other symbols: 
 1. For D: R and U 
@@ -347,6 +377,7 @@ So, to handle above cases we made three different classifiers for classifying th
 1. {D, R, U}
 2. {T, K, D, I} 
 3. {S, M, N}
+
 ``` python
 #LAYER 1
 
@@ -396,8 +427,11 @@ So, to handle above cases we made three different classifiers for classifying th
 
         		self.current_symbol = prediction1[0][0]
 ```
-⦁	We defined five methods to suggest words from the letters and display the words in 3 buttons at the bottom of the screen as shown below:
+
+⦁ We defined five methods to suggest words from the letters and display the words in 3 buttons at the bottom of the screen as shown below:
+
 ![Capture](https://user-images.githubusercontent.com/56514238/174484580-07ead4f9-d350-4510-86d5-00513fd814a1.PNG)
+
 ``` python
 def action1(self):
 
@@ -447,7 +481,9 @@ def action1(self):
             self.str += " "
             self.str += predicts[4]
 ```
-⦁	Finally, release the capture and close all windows by creating a method called destructor outside the video loop to end the main function
+
+⦁ Finally, release the capture and close all windows by creating a method called destructor outside the video loop to end the main function
+
 ``` python
  def destructor(self):
 
@@ -457,7 +493,9 @@ def action1(self):
         self.vs.release()
         cv2.destroyAllWindows()
 ```
-⦁	Once the script is run, a window will pop up with your live webcam feed. The predicted sign language letter will be shown in the character. Hold up your hand and make your favorite sign to see your classifier in action. Here are some sample results
+
+⦁ Once the script is run, a window will pop up with your live webcam feed. The predicted sign language letter will be shown in the character. Hold up your hand and make your favorite sign to see your classifier in action. Here are some sample results
+
 ![Capture](https://user-images.githubusercontent.com/56514238/174484716-dfb8c4b0-9155-4be5-b043-5b53cbe24914.PNG)
 
 # License
