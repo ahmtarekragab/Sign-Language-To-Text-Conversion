@@ -1,2 +1,1 @@
-# Sign-Language-To-Text-Conversion
-Graduation Project - Sign Language To Text Conversion Using Python, Computer Vision and Machine Learning
+[README.md](https://github.com/Ahmedtarekragab/Sign-Language-To-Text-Conversion/files/8935578/README.md)
